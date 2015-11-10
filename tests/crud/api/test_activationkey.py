@@ -51,14 +51,13 @@ class ActivationKeys(APITestCase):
         @Feature: ActivationKey
 
         """
-        act_key = entities.ActivationKey(organization=self.org,).create()
+        act_key = entities.ActivationKey(organization=self.org).create()
 
         new_name = gen_string('utf8', 30)
-        updated_key = entities.ActivationKey(
+        updated = entities.ActivationKey(
             id=act_key.id, name=new_name).update(['name'])
-        self.assertEqual(new_name, updated_key.name)
-        self.assertNotEqual(act_key.name, updated_key.name)
-
+        self.assertEqual(new_name, updated.name)
+        self.assertNotEqual(act_key.name, updated.name)
 
     def test_negative_update(self):
         """@Test: Create activation key then update its name to an invalid name.
@@ -68,7 +67,7 @@ class ActivationKeys(APITestCase):
         @Feature: ActivationKey
 
         """
-        act_key = entities.ActivationKey(organization=self.org,).create()
+        act_key = entities.ActivationKey(organization=self.org).create()
         name = act_key.name
         new_name = gen_string('utf8', 300)
         with self.assertRaises(HTTPError):
@@ -86,7 +85,7 @@ class ActivationKeys(APITestCase):
         @Feature: ActivationKey
 
         """
-        act_key = entities.ActivationKey(organization=self.org,).create()
+        act_key = entities.ActivationKey(organization=self.org).create()
         act_key.delete()
         with self.assertRaises(HTTPError):
             entities.ActivationKey(id=act_key.id).read()
